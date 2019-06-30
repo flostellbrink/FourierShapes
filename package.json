@@ -1,0 +1,24 @@
+{
+  "name": "fouriershapes",
+  "version": "1.0.0",
+  "description": "FourierShapes",
+  "main": "index.js",
+  "scripts": {
+    "install": "browserify main.js -o index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flostellbrink/FourierShapes.git"
+  },
+  "author": "Florian Stellbrink",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/flostellbrink/FourierShapes/issues"
+  },
+  "homepage": "https://github.com/flostellbrink/FourierShapes#readme",
+  "dependencies": {
+    "browserify": "^16.2.3",
+    "mathjs": "^6.0.2",
+    "svg-path-interpolator": "^0.2.5"
+  }
+}
