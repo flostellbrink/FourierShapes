@@ -1,4 +1,4 @@
-# Path Approximation with Fourier Series
+# Path Approximation with Fourier Series [![Build Status](https://travis-ci.com/flostellbrink/FourierShapes.svg?branch=master)](https://travis-ci.com/flostellbrink/FourierShapes)
 
 This application approximates arbitrary shapes with a series of Fourier terms.
 
