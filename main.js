@@ -1,3 +1,4 @@
+var work = require('webworkify');
 var mathjs = require("mathjs");
 var svgPathInterpolator = require("svg-path-interpolator");
 var interpolator = new svgPathInterpolator({
@@ -11,19 +12,23 @@ const WIDTH = 600;
 const HEIGHT = 600;
 const SCALE_X = 200;
 const SCALE_Y = 200;
+const MAX_DEPTH = 500;
 
 var ctx = undefined;
 var pathData = undefined;
 var depth = 100;
-var weights = undefined;
+var weights = new Array(MAX_DEPTH).fill(0);
 var start = new Date();
+var worker = undefined;
 
-function setDepth(value) {
-    depth = value;
-    findWeights();
-}
+window.onload = init;
 
-window.onload = () => {
+function init() {
+    worker = work(require('./worker.js'));
+    worker.addEventListener('message', function (e) {
+        weights[e.data.index] = mathjs.complex(e.data.weight.re, e.data.weight.im);
+    });
+
     canvas = document.getElementById("canvas");
     canvas.ondragover = e => {
         e.preventDefault();
@@ -37,19 +42,25 @@ window.onload = () => {
     reverse = document.getElementById("reverse");
     reverse.onclick = () => {
         pathData.reverse();
-        findWeights();
+        requestWeights();
     }
 
     depthRange = document.getElementById("depth");
-    depthRange.onchange = () => setDepth(depthRange.value);
+    depthRange.oninput = () => depth = depthRange.value;
 
     loadSvg("<svg><path d=\"M213.1,6.7c-32.4-14.4-73.7,0-88.1,30.6C110.6,4.9,67.5-9.5,36.9,6.7C2.8,22.9-13.4,62.4,13.5,110.9,C33.3,145.1,67.5,170.3,125,217c59.3-46.7,93.5-71.9,111.5-106.1C263.4,64.2,247.2,22.9,213.1,6.7z\" /></svg>", true)
     window.requestAnimationFrame(draw);
 }
 
+function requestWeights() {
+    // This is a long running operation.
+    // We run it in a service worker, and update the weights as we go.
+    worker.postMessage(pathData);
+}
+
 function fileChangeHandler(e) {
     if (!e.target.files) {
-        console.error("No file in drop")
+        console.error("No file opened")
     }
     loadSvgFile(e.target.files[0])
 }
@@ -76,23 +87,7 @@ function loadSvg(svgString, reverse = false) {
     if(reverse) {
         pathData = pathData.reverse();
     }
-    findWeights();
-}
-
-function findWeights() {
-    weights = []
-    for (var i = 0; i < depth; i++) {
-        // Transform path data e^-i 2pi
-        var newPath = pathData.map((value, index) =>
-            mathjs.multiply(
-                mathjs.pow(
-                    mathjs.e,
-                    mathjs.multiply(
-                        -i * 2 * mathjs.pi * (index / pathData.length),
-                        mathjs.i)),
-                value));
-        weights.push(mathjs.mean(...newPath))
-    }
+    requestWeights();
 }
 
 function normalize(values) {
