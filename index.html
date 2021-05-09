@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+    <head>
+        <title>FourierShapes</title>
+        <script src="index.js"></script>
+    </head>
+    <body>
+        <div style="width: 600px; margin: auto">
+            <canvas id="canvas" width="600" height="600"></canvas>
+            <div>
+                <input id="file" type="file" accept="image/svg+xml">
+                <button id="reverse">Reverse Direction</button>
+            </div>
+            <table style="width:100%">
+                <tr>
+                    <td style="white-space: nowrap">Number of fourier terms:</td>
+                    <td width="100%">
+                        <input id="depth" type="range" min="1" max="500" value="100" class="slider" style="width: 100%">
+                    </td>
+                </tr>
+            </table>
+            
+        </div>
+    </body>
+</html>
