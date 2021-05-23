@@ -1,10 +1,10 @@
-# Path Approximation with Fourier Series [![Build Status](https://travis-ci.com/flostellbrink/FourierShapes.svg?branch=master)](https://travis-ci.com/flostellbrink/FourierShapes)
+# Path Approximation with Fourier Series
 
 [![Screenshot](screenshots/main.png)](http://flo.stellbr.ink/FourierShapes/)
 
 This application approximates arbitrary shapes with a series of Fourier terms.
 
-We load shapes from `SVG` files. After loading the file, paramters are determined automatically and we display an animated view of the approximated shape.
+We load shapes from `SVG` files. After loading the file, parameters are determined automatically and we display an animated view of the approximated shape.
 
 The approximation can suffer when the shapes direction does not match the approximation. In this case the `Reverse` button can invert the order within the loaded shape.
 
